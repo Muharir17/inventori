@@ -13,6 +13,8 @@
                 <div class="card-header">
                     <h2 class="card-title">List Data Pengguna</h2>
                     <a href="{{ route('pengguna.create') }}" class="btn btn-md btn-primary float-right">Tambah Pengguna</a>
+
+                    <a href="{{ route('pengguna.export') }}" class="btn btn-md btn-success float-right mr-2">Cetak PDF</a>
                 </div>
 
                 <div class="card-body">
@@ -34,8 +36,12 @@
                             <td>{{ $u->name }}</td>
                             <td>{{ $u->email }}</td>
                             <td>
-                                <a href="" class="btn btn-md btn-warning">Edit</a>
-                                <a href="" class="btn btn-md btn-danger">Hapus</a>
+                                <form action="{{ route('pengguna.destroy', $u->id) }}" method="post">
+                                    @csrf
+                                    @method('delete')
+                                    <a href="{{ route('pengguna.edit', $u->id) }}" class="btn btn-md btn-warning">Edit</a>
+                                    <button type="submit" class="btn btn-md btn-danger">Hapus</button>
+                                </form>
                             </td>
                         </tr>
                         @endforeach

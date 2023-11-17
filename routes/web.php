@@ -28,3 +28,4 @@ Route::get('/home', function() {
 })->name('home')->middleware('auth');
 
 Route::resource('pengguna', App\Http\Controllers\UserController::class);
+Route::get('pengguna-export', [App\Http\Controllers\UserController::class, 'export'])->name('pengguna.export');

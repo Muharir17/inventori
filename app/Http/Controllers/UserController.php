@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Hash;
 use Alert;
+use PDF;
 
 class UserController extends Controller
 {
@@ -56,7 +57,8 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = User::find($id);
+        return view('pengguna.edit', compact('user'));
     }
 
     /**
@@ -64,7 +66,15 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $user = User::find($id);
+        $user->update([
+            'name' => $request->name,
+            'password' => is_null($request->password) ? $user->password : Hash::make($request->password),
+            'email' => $request->email,
+        ]);
+
+        Alert::success('Berhasilll', 'Edit Data Sukses');
+        return redirect()->route('pengguna.index');
     }
 
     /**
@@ -72,6 +82,17 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::find($id);
+        $user->delete();
+
+        Alert::success('Berhasilll', 'Hapus Data Sukses');
+        return redirect()->route('pengguna.index');
+    }
+
+    public function export()
+    {
+        $user = User::all();
+        $pdf = PDF::loadview('pengguna.pdf', compact('user'));
+        return $pdf->stream('pengguna.pdf');
     }
 }
